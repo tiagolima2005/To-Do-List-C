@@ -1,0 +1,1 @@
+Este projeto tem o intuito de me ajudar a aprender C e git
