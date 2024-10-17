@@ -2,13 +2,15 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define max_tasks 100 // maximum 100 tasks
-#define task_length 255 // a task can have 255 characters maximum
+#define max_tasks 100   // maximum 100 tasks
+#define task_length 255    // a task can have 255 characters maximum
 #define tasks_savefile "ToDoList.txt" // tasks will save as ToDoList.txt
 
-int Answer; // used to read the first input aka 1-6
+int Answer;  // used to read the first input aka 1-6
 int total_tasks = 0; // total tasks
-char tasks[max_tasks][task_length]; 
+char tasks[max_tasks][task_length];
+
+void add_task();
 
 int main()
 {
@@ -22,6 +24,7 @@ int main()
         printf("Type '5' to Mark a task as completed\n");
         printf("Type '6' to Exit the program\n");
         scanf("%d", &Answer);
+        getchar(); // cleans buffer so that fgets can work properly
 
         switch (Answer)
         {
@@ -38,7 +41,7 @@ int main()
             break;
 
         case 4:
-            printf("Closing...");
+            /* code */
             break;
 
         case 5:
@@ -46,26 +49,29 @@ int main()
             break;
 
         case 6:
-            /* code */
+            printf("Exiting the program...");
             break;
 
         default:
             printf("Invalid Option\n");
         }
 
-    } while (Answer != 4);
+    } while (Answer != 6);
 
     return 0;
 }
 
-void add_task(){
-    if (total_tasks >= max_tasks){ //before adding a task it checks if it can or cannot add (if it reached the limit or not)
+void add_task()
+{
+    if (total_tasks >= max_tasks) // before adding a task it checks if it can or cannot add (if it reached the limit or not)
+    { 
         printf("Maximum number of tasks reached!\n");
         return;
     }
 
-    printf("Insert the task you want to add:");
-    fgets(tasks[max_tasks], task_length, stdin); //reads the new task and adds it to max_tasks while checking its length to make sure it doesnt go over the limit
-    tasks[total_tasks][strcspn(tasks[max_tasks], "\n")] = 0; 
+    printf("Insert the task you want to add:\n");
+    fgets(tasks[total_tasks], task_length, stdin);             // reads the new task and adds it to total_tasks
+    tasks[total_tasks][strcspn(tasks[total_tasks], "\n")] = 0; // removes the new line at the end of the string
     total_tasks++;
+    printf("Task added successfully!\n");
 }
