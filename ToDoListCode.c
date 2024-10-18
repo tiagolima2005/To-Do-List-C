@@ -13,6 +13,7 @@ char tasks[max_tasks][task_length];
 void add_task();
 void remove_task();
 void show_tasks();
+void edit_task();
 
 int main()
 {
@@ -39,7 +40,7 @@ int main()
             break;
 
         case 3:
-            /* code */
+            edit_task();
             break;
 
         case 4:
@@ -106,4 +107,24 @@ void remove_task()
         strcpy(tasks[i], tasks[i + 1]); // copies the task in i + 1 position to i position
     }
     total_tasks--; // decrease the value of total tasks
+}
+
+void edit_task()
+{
+    int task_number_edit;
+    show_tasks();
+    printf("Enter the number of the task you wish to edit:\n");
+    scanf("%d", &task_number_edit); //reads the task number
+    getchar(); //cleans buffer
+
+    if (task_number_edit < 1 || task_number_edit > total_tasks) //if statement to check if its a valid number
+    {
+        printf("Invalid Number...\n");
+        return;
+    }
+
+    printf("Insert the edited task:\n"); 
+    fgets(tasks[task_number_edit - 1], task_length, stdin); //reads the new task and updates it
+    tasks[task_number_edit - 1][strcspn(tasks[task_number_edit - 1], "\n")] = 0; //removes the new line
+    printf("Task edited successfully!\n");
 }
