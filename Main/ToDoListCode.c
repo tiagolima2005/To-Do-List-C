@@ -8,12 +8,20 @@
 
 int Answer;          // used to read the first input aka 1-6
 int total_tasks = 0; // total tasks
-char tasks[max_tasks][task_length];
+
+typedef struct
+{
+    char name[task_length]; //task name
+    bool completed; //task completion status
+} Task;
+
+Task tasks[max_tasks]; //array of tasks
 
 void add_task();
 void remove_task();
 void show_tasks();
 void edit_task();
+void mark_completed();
 
 int main()
 {
@@ -48,7 +56,7 @@ int main()
             break;
 
         case 5:
-            /* code */
+            mark_completed();
             break;
 
         case 6:
@@ -73,8 +81,9 @@ void add_task()
     }
 
     printf("Insert the task you want to add:\n");
-    fgets(tasks[total_tasks], task_length, stdin);             // reads the new task and adds it to total_tasks
-    tasks[total_tasks][strcspn(tasks[total_tasks], "\n")] = 0; // removes the new line at the end of the string
+    fgets(tasks[total_tasks].name, task_length, stdin);             // reads the new task and adds it to total_tasks
+    tasks[total_tasks].name[strcspn(tasks[total_tasks].name, "\n")] = 0; // removes the new line at the end of the string
+    tasks[total_tasks].completed = false;
     total_tasks++;
     printf("Task added successfully!\n");
 }
@@ -84,7 +93,7 @@ void show_tasks()
     printf("Your tasks:\n");              // header for the tasks list
     for (int i = 0; i < total_tasks; i++) // loop to go through all tasks
     {
-        printf("%d - %s\n", i + 1, tasks[i]); // prints the task number and its content
+        printf("%d - [%s] %s\n", i + 1, tasks[i].completed ? "DONE" : "NOT DONE", tasks[i].name); // prints the task number and its content
     }
 }
 
@@ -104,7 +113,7 @@ void remove_task()
 
     for (int i = task_number - 1; i < total_tasks - 1; i++) // moves all tasks one position up ex: 2 to 1
     {
-        strcpy(tasks[i], tasks[i + 1]); // copies the task in i + 1 position to i position
+        tasks[i] = tasks[i + 1]; // copies the task in i + 1 position to i position
     }
     total_tasks--; // decrease the value of total tasks
 }
@@ -124,7 +133,25 @@ void edit_task()
     }
 
     printf("Insert the edited task:\n");
-    fgets(tasks[task_number_edit - 1], task_length, stdin);                      // reads the new task and updates it
-    tasks[task_number_edit - 1][strcspn(tasks[task_number_edit - 1], "\n")] = 0; // removes the new line
+    fgets(tasks[task_number_edit - 1].name, task_length, stdin);                      // reads the new task and updates it
+    tasks[task_number_edit - 1].name[strcspn(tasks[task_number_edit - 1].name, "\n")] = 0; // removes the new line
     printf("Task edited successfully!\n");
+}
+
+void mark_completed()
+{
+    show_tasks();
+    int task_number_completed;
+    printf("Insert the number of the task you want to mark as completed:\n");
+    scanf("%d" , &task_number_completed); //reads the number of the task
+
+    if (task_number_completed < 1 || task_number_completed > total_tasks) // if statement to check if its valid
+    {
+        printf("Invalid Number...\n");
+        return;
+    }
+
+    tasks[task_number_completed - 1].completed = true; // Mark the specified task as completed
+
+    printf("Task marked as completed!\n");
 }
