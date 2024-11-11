@@ -11,20 +11,24 @@ int total_tasks = 0; // total tasks
 
 typedef struct
 {
-    char name[task_length]; //task name
-    bool completed; //task completion status
+    char name[task_length]; // task name
+    bool completed;         // task completion status
 } Task;
 
-Task tasks[max_tasks]; //array of tasks
+Task tasks[max_tasks]; // array of tasks
 
 void add_task();
 void remove_task();
 void show_tasks();
 void edit_task();
 void mark_completed();
+void save_tasks();
+void load_tasks();
 
 int main()
 {
+    load_tasks(); // Carrega as tarefas salvas no início do programa
+
     do
     {
         printf("\nWelcome to your To do List App\n");
@@ -35,20 +39,23 @@ int main()
         printf("Type '5' to Mark a task as completed\n");
         printf("Type '6' to Exit the program\n");
         scanf("%d", &Answer);
-        getchar(); // cleans buffer so that fgets can work properly
+        getchar(); // Limpa o buffer para o fgets funcionar corretamente
 
         switch (Answer)
         {
         case 1:
             add_task();
+            save_tasks(); // Salva as alterações
             break;
 
         case 2:
             remove_task();
+            save_tasks(); // Salva as alterações
             break;
 
         case 3:
             edit_task();
+            save_tasks(); // Salva as alterações
             break;
 
         case 4:
@@ -57,6 +64,7 @@ int main()
 
         case 5:
             mark_completed();
+            save_tasks(); // Salva as alterações
             break;
 
         case 6:
@@ -81,7 +89,7 @@ void add_task()
     }
 
     printf("Insert the task you want to add:\n");
-    fgets(tasks[total_tasks].name, task_length, stdin);             // reads the new task and adds it to total_tasks
+    fgets(tasks[total_tasks].name, task_length, stdin);                  // reads the new task and adds it to total_tasks
     tasks[total_tasks].name[strcspn(tasks[total_tasks].name, "\n")] = 0; // removes the new line at the end of the string
     tasks[total_tasks].completed = false;
     total_tasks++;
@@ -133,7 +141,7 @@ void edit_task()
     }
 
     printf("Insert the edited task:\n");
-    fgets(tasks[task_number_edit - 1].name, task_length, stdin);                      // reads the new task and updates it
+    fgets(tasks[task_number_edit - 1].name, task_length, stdin);                           // reads the new task and updates it
     tasks[task_number_edit - 1].name[strcspn(tasks[task_number_edit - 1].name, "\n")] = 0; // removes the new line
     printf("Task edited successfully!\n");
 }
@@ -143,7 +151,7 @@ void mark_completed()
     show_tasks();
     int task_number_completed;
     printf("Insert the number of the task you want to mark as completed:\n");
-    scanf("%d" , &task_number_completed); //reads the number of the task
+    scanf("%d", &task_number_completed); // reads the number of the task
 
     if (task_number_completed < 1 || task_number_completed > total_tasks) // if statement to check if its valid
     {
@@ -154,4 +162,44 @@ void mark_completed()
     tasks[task_number_completed - 1].completed = true; // Mark the specified task as completed
 
     printf("Task marked as completed!\n");
+}
+
+void save_tasks()
+{
+    FILE *file = fopen(tasks_savefile, "w"); // open the file in write mode
+    if (file == NULL)
+    {
+        printf("Error opening file for saving tasks!\n");
+        return;
+    }
+
+    fprintf(file, "%d\n", total_tasks); // Save total number of tasks
+    for (int i = 0; i < total_tasks; i++)
+    {
+        fprintf(file, "%d\n%s\n", tasks[i].completed, tasks[i].name); // save each task's status and name
+    }
+
+    fclose(file); // close the file
+}
+
+void load_tasks()
+{
+    FILE *file = fopen(tasks_savefile, "r"); // open the file in read mode
+    if (file == NULL)
+    {
+        printf("No saved tasks found.\n");
+        return;
+    }
+
+    fscanf(file, "%d\n", &total_tasks); // Read the total number of tasks
+    for (int i = 0; i < total_tasks; i++)
+    {
+        int completed;
+        fscanf(file, "%d\n", &completed); // Read task completion status
+        tasks[i].completed = completed;
+        fgets(tasks[i].name, task_length, file);         // Read task name
+        tasks[i].name[strcspn(tasks[i].name, "\n")] = 0; // Remove newline character
+    }
+
+    fclose(file); // close the file
 }
