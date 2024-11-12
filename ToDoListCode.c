@@ -202,4 +202,6 @@ void load_tasks()
     }
 
     fclose(file); // close the file
+
+    printf("%d task(s) loaded succesfully.\n" , total_tasks   );
 }
