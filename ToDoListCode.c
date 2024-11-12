@@ -36,7 +36,7 @@ int main()
         printf("Type '2' to Remove a task\n");
         printf("Type '3' to Edit a task\n");
         printf("Type '4' to Show all your tasks\n");
-        printf("Type '5' to Mark a task as completed\n");
+        printf("Type '5' to Mark a task as 'DONE' or 'NOT DONE'\n");
         printf("Type '6' to Exit the program\n");
         scanf("%d", &Answer);
         getchar(); // Limpa o buffer para o fgets funcionar corretamente
@@ -148,20 +148,29 @@ void edit_task()
 
 void mark_completed()
 {
-    show_tasks();
-    int task_number_completed;
-    printf("Insert the number of the task you want to mark as completed:\n");
-    scanf("%d", &task_number_completed); // reads the number of the task
+    show_tasks(); // Display all tasks
+    int task_number_completed; // Variable to store the task number
+    printf("Insert the number of the task you want to mark as 'DONE' or 'NOT DONE':\n");
+    scanf("%d", &task_number_completed); // Read the number of the task
 
-    if (task_number_completed < 1 || task_number_completed > total_tasks) // if statement to check if its valid
+    if (task_number_completed < 1 || task_number_completed > total_tasks) // Check if the task number is valid
     {
         printf("Invalid Number...\n");
         return;
     }
 
-    tasks[task_number_completed - 1].completed = true; // Mark the specified task as completed
+    // Toggle the task's completion status (if it was 'DONE', it becomes 'NOT DONE', and vice versa)
+    tasks[task_number_completed - 1].completed = !tasks[task_number_completed - 1].completed; 
 
-    printf("Task marked as completed!\n");
+    // Inform the user about the task's updated completion status
+    if (tasks[task_number_completed - 1].completed)
+    {
+        printf("Task marked as completed!\n");
+    }
+    else
+    {
+        printf("Task marked as not completed!\n");
+    }
 }
 
 void save_tasks()
