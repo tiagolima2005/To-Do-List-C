@@ -98,10 +98,16 @@ void add_task()
 
 void show_tasks()
 {
-    printf("Your tasks:\n");              // header for the tasks list
-    for (int i = 0; i < total_tasks; i++) // loop to go through all tasks
+    if (total_tasks <= 0) // Check if there are no tasks
     {
-        printf("%d - [%s] %s\n", i + 1, tasks[i].completed ? "DONE" : "NOT DONE", tasks[i].name); // prints the task number and its content
+        printf("No tasks yet.\n"); // Inform the user that no tasks have been added
+        return;                    // Exit the function early since there are no tasks to display
+    }
+
+    printf("Your tasks:\n");              // Header for the tasks list
+    for (int i = 0; i < total_tasks; i++) // Loop through all tasks
+    {
+        printf("%d - [%s] %s\n", i + 1, tasks[i].completed ? "DONE" : "NOT DONE", tasks[i].name); // Print each task with its completion status
     }
 }
 
@@ -148,7 +154,7 @@ void edit_task()
 
 void mark_completed()
 {
-    show_tasks(); // Display all tasks
+    show_tasks();              // Display all tasks
     int task_number_completed; // Variable to store the task number
     printf("Insert the number of the task you want to mark as 'DONE' or 'NOT DONE':\n");
     scanf("%d", &task_number_completed); // Read the number of the task
@@ -160,7 +166,7 @@ void mark_completed()
     }
 
     // Toggle the task's completion status (if it was 'DONE', it becomes 'NOT DONE', and vice versa)
-    tasks[task_number_completed - 1].completed = !tasks[task_number_completed - 1].completed; 
+    tasks[task_number_completed - 1].completed = !tasks[task_number_completed - 1].completed;
 
     // Inform the user about the task's updated completion status
     if (tasks[task_number_completed - 1].completed)
@@ -212,5 +218,5 @@ void load_tasks()
 
     fclose(file); // close the file
 
-    printf("%d task(s) loaded succesfully.\n" , total_tasks   );
+    printf("%d task(s) loaded succesfully.\n", total_tasks);
 }
