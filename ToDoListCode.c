@@ -27,7 +27,7 @@ void load_tasks();
 
 int main()
 {
-    load_tasks(); // Carrega as tarefas salvas no início do programa
+    load_tasks(); // loads the saved tasks
 
     do
     {
@@ -39,23 +39,23 @@ int main()
         printf("Type '5' to Mark a task as 'DONE' or 'NOT DONE'\n");
         printf("Type '6' to Exit the program\n");
         scanf("%d", &Answer);
-        getchar(); // Limpa o buffer para o fgets funcionar corretamente
+        getchar(); // cleans buffer
 
         switch (Answer)
         {
         case 1:
             add_task();
-            save_tasks(); // Salva as alterações
+            save_tasks(); // saves changes
             break;
 
         case 2:
             remove_task();
-            save_tasks(); // Salva as alterações
+            save_tasks(); // saves changes
             break;
 
         case 3:
             edit_task();
-            save_tasks(); // Salva as alterações
+            save_tasks(); // saves changes
             break;
 
         case 4:
@@ -64,7 +64,7 @@ int main()
 
         case 5:
             mark_completed();
-            save_tasks(); // Salva as alterações
+            save_tasks(); // saves changes
             break;
 
         case 6:
